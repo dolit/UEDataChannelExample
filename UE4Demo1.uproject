@@ -1,0 +1,17 @@
+{
+	"FileVersion": 3,
+	"EngineAssociation": "{EC93049E-4099-1B68-F32C-80A70B31E03F}",
+	"Category": "",
+	"Description": "",
+	"Modules": [
+		{
+			"Name": "UE4Demo1",
+			"Type": "Runtime",
+			"LoadingPhase": "Default",
+			"AdditionalDependencies": [
+				"Engine",
+				"UMG"
+			]
+		}
+	]
+}
