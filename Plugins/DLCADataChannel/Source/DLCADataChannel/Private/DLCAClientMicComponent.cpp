@@ -72,7 +72,7 @@ bool UDLCAClientMicComponent::Connect()
 		ClientMicPcmFormatDelegate.Broadcast(Message);
 	});
 
-	IpcSocket->OnBinaryMessage().AddLambda([=](const void* Data, SIZE_T Size, SIZE_T BytesRemaining) -> void {
+	IpcSocket->OnRawMessage().AddLambda([=](const void* Data, SIZE_T Size, SIZE_T BytesRemaining) -> void {
 		// This code will run when we receive a raw (binary) message from the server.
 		TArray<uint8> Binray((uint8*)Data,Size);
 		ClientMicPcmBinaryDelegate.Broadcast(Binray);
