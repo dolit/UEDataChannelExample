@@ -19,7 +19,25 @@ UDLCADataChannelActorComponent::UDLCADataChannelActorComponent()
 void UDLCADataChannelActorComponent::BeginPlay()
 {
 	Super::BeginPlay();
-	UE_LOG(LogTemp, Display, TEXT("dlca data channel begin play"));
+
+	double CurrentThreadTargetFrameTimeInSeconds = 0;
+	const double kSetFrameTimeValue = 0.00005;
+	if(GConfig->GetDouble(TEXT("WebSockets.LibWebSockets"), TEXT("ThreadTargetFrameTimeInSeconds"), CurrentThreadTargetFrameTimeInSeconds, GEngineIni)) {
+		if(CurrentThreadTargetFrameTimeInSeconds >= kSetFrameTimeValue) {
+			GConfig->SetDouble(TEXT("WebSockets.LibWebSockets"), TEXT("ThreadTargetFrameTimeInSeconds"), kSetFrameTimeValue, GEngineIni);
+			UE_LOG(LogTemp, Warning, TEXT("dlca set time due to not in range %lf"),CurrentThreadTargetFrameTimeInSeconds);
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("dlca set time no need,current val %lf"),CurrentThreadTargetFrameTimeInSeconds);
+		}
+	}
+	else
+	{
+		GConfig->SetDouble(TEXT("WebSockets.LibWebSockets"), TEXT("ThreadTargetFrameTimeInSeconds"), kSetFrameTimeValue, GEngineIni);
+		UE_LOG(LogTemp, Warning, TEXT("dlca set time no config"));
+	}
+	
 	// ... 
 	FModuleManager::Get().LoadModuleChecked("WebSockets");
 }

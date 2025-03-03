@@ -8,7 +8,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FMuitDynamicDataChannelBinrayDelegat
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FMuitDynamicDataChannelConnectStatusChanged, bool, connected);
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
-class UDLCADataChannelActorComponent : public UActorComponent
+class DLCADATACHANNEL_API UDLCADataChannelActorComponent : public UActorComponent
 {
 	GENERATED_BODY()
 public:
