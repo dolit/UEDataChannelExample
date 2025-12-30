@@ -8,7 +8,7 @@ public class UE4Demo1EditorTarget : TargetRules
 	public UE4Demo1EditorTarget( TargetInfo Target) : base(Target)
 	{
 		Type = TargetType.Editor;
-		DefaultBuildSettings = BuildSettingsVersion.V2;
+		DefaultBuildSettings = BuildSettingsVersion.Latest;
 		ExtraModuleNames.AddRange( new string[] { "UE4Demo1" } );
 	}
 }

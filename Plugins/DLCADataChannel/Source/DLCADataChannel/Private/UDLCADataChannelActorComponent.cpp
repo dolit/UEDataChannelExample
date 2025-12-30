@@ -57,13 +57,13 @@ bool UDLCADataChannelActorComponent::Connect()
 	const FString ServerProtocol = TEXT("ws");              // The WebServer protocol you want to use.
 	IpcSocket = FWebSocketsModule::Get().CreateWebSocket(ServerURL, ServerProtocol);
 	// We bind all available events
-	IpcSocket->OnConnected().AddLambda([=]() -> void {
+	IpcSocket->OnConnected().AddLambda([this]() -> void {
 		// This code will run once connected.
 		UE_LOG(LogTemp, Display, TEXT("dlca data channel conencted!"));
 		MuitDynamicDataChannelConnectStatusChanged.Broadcast(true);
 	});
 
-	IpcSocket->OnConnectionError().AddLambda([=](const FString& Error) -> void {
+	IpcSocket->OnConnectionError().AddLambda([this](const FString& Error) -> void {
 		// This code will run if the connection failed. Check Error to see what happened.
 		UE_LOG(LogTemp, Warning, TEXT("dlca data channel connect error! Error:%s"),*Error);
 		MuitDynamicDataChannelConnectStatusChanged.Broadcast(false);
@@ -71,7 +71,7 @@ bool UDLCADataChannelActorComponent::Connect()
 		GetWorld()->GetTimerManager().SetTimer(ReConnectTimerHandle,this,&UDLCADataChannelActorComponent::ReConnect,1.0f,false,1.0f);
 	});
 	
-	IpcSocket->OnClosed().AddLambda([=](int32 StatusCode, const FString& Reason, bool bWasClean) -> void {
+	IpcSocket->OnClosed().AddLambda([this](int32 StatusCode, const FString& Reason, bool bWasClean) -> void {
 		// This code will run when the connection to the server has been terminated.
 		// Because of an error or a call to Socket->Close().
 		UE_LOG(LogTemp, Warning, TEXT("dlca data channel on closed! StatusCode %d Reason:%s bWasClean:%d"),StatusCode,*Reason,bWasClean);
@@ -80,12 +80,12 @@ bool UDLCADataChannelActorComponent::Connect()
 		GetWorld()->GetTimerManager().SetTimer(ReConnectTimerHandle,this,&UDLCADataChannelActorComponent::ReConnect,1.0f,false,1.0f);
 	});
 
-	IpcSocket->OnMessage().AddLambda([=](const FString& Message) -> void {
+	IpcSocket->OnMessage().AddLambda([this](const FString& Message) -> void {
 		// This code will run when we receive a string message from the server.
 		MuitDynamicTextDelegate.Broadcast(Message);
 	});
 
-	IpcSocket->OnRawMessage().AddLambda([=](const void* Data, SIZE_T Size, SIZE_T BytesRemaining) -> void {
+	IpcSocket->OnRawMessage().AddLambda([this](const void* Data, SIZE_T Size, SIZE_T BytesRemaining) -> void {
 		// This code will run when we receive a raw (binary) message from the server.
 		TArray<uint8> Binray((uint8*)Data,Size);
 		MuitDynamicBinrayDelegate.Broadcast(Binray);
