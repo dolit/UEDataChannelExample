@@ -47,7 +47,7 @@ bool UDLCAClientMicComponent::Connect()
 	const FString ServerProtocol = TEXT("ws");              // The WebServer protocol you want to use.
 	IpcSocket = FWebSocketsModule::Get().CreateWebSocket(ServerURL, ServerProtocol);
 	// We bind all available events
-	IpcSocket->OnConnected().AddLambda([=]() -> void {
+	IpcSocket->OnConnected().AddLambda([this]() -> void {
 		// This code will run once connected.
 		UE_LOG(LogTemp, Display, TEXT("pull mic websocket conencted!"));
 	});
